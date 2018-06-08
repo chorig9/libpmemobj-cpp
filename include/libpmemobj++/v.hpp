@@ -145,7 +145,7 @@ public:
 	}
 
 private:
-	struct pmemvlt vlt;
+	pmemvlt vlt;
 	T val;
 };
 
