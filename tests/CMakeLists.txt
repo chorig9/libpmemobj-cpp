@@ -112,7 +112,7 @@ build_test(transaction transaction/transaction.cpp)
 build_test(ptr_arith ptr_arith/ptr_arith.cpp)
 
 #build_test(pool_win pool_win/pool_win.cpp) XXX: add toUTF8
-#build_test(v v/v.cpp) XXX: fix compile error
+build_test(v v/v.cpp)
 
 if(NO_CHRONO_BUG)
 	build_test(cond_var cond_var/cond_var.cpp)
