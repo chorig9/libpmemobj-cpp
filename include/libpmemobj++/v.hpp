@@ -42,6 +42,8 @@
 
 #include "libpmemobj++/detail/common.hpp"
 #include "libpmemobj++/detail/volatile.hpp"
+#include "libpmemobj.h"
+#include "libpmemobj/base.h"
 
 namespace pmem
 {
