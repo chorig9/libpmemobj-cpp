@@ -54,7 +54,6 @@
 #define RAND_FIELD() (rand() % (SIZE - 2) + 1)
 #define EXPLOSION_TIME 20
 #define EXPLOSION_COUNTER 80
-#define SLEEP_TIME (2 * CLOCKS_PER_SEC)
 #define GAME_DELAY 40000
 #define SLEEP(t)                                                               \
 	do {                                                                   \
