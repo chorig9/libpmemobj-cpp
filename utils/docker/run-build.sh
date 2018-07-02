@@ -45,6 +45,7 @@ mkdir $INSTALL_DIR
 mkdir build
 cd build
 
+PKG_CONFIG_PATH=/opt/pmdk/lib/pkgconfig/ \
 CC=clang CXX=clang++ \
 cmake .. -DDEVELOPER_MODE=1 \
 			-DCMAKE_BUILD_TYPE=Debug \
@@ -64,6 +65,7 @@ rm -r build
 mkdir build
 cd build
 
+PKG_CONFIG_PATH=/opt/pmdk/lib/pkgconfig/ \
 CC=clang CXX=clang++ \
 cmake .. -DDEVELOPER_MODE=1 \
 			-DCMAKE_BUILD_TYPE=Debug \
@@ -81,6 +83,7 @@ rm -r build
 mkdir build
 cd build
 
+PKG_CONFIG_PATH=/opt/pmdk/lib/pkgconfig/ \
 CC=gcc CXX=g++ \
 cmake .. -DDEVELOPER_MODE=1 \
 			-DCMAKE_BUILD_TYPE=Debug \
@@ -98,6 +101,7 @@ rm -r build
 mkdir build
 cd build
 
+PKG_CONFIG_PATH=/opt/pmdk/lib/pkgconfig/ \
 CC=gcc CXX=g++ \
 cmake .. -DCMAKE_BUILD_TYPE=Release \
 			-DCMAKE_INSTALL_PREFIX=$INSTALL_DIR \
@@ -114,15 +118,27 @@ rm -r build
 mkdir build
 cd build
 
+if [ $PACKAGE_MANAGER = "deb" ]; then
+	wget https://github.com/pmem/pmdk/releases/download/1.4/pmdk-1.4-dpkgs.tar.gz	
+	tar -xzf pmdk-1.4-dpkgs.tar.gz	
+	echo $USERPASS | sudo -S dpkg -i libpmem_*.deb libpmem-dev_*.deb	
+	sudo dpkg -i libpmemobj_*.deb libpmemobj-dev_*.deb
+elif [ $PACKAGE_MANAGER = "rpm" ]; then
+	wget https://github.com/pmem/pmdk/releases/download/1.4/pmdk-1.4-rpms.tar.gz
+	tar -xzf pmdk-1.4-rpms.tar.gz
+	echo $USERPASS | sudo -S rpm -i x86_64/libpmem-*.rpm
+	sudo rpm -i x86_64/libpmemobj-*.rpm
+fi
+
 cmake .. -DCMAKE_INSTALL_PREFIX=/usr \
 		-DCPACK_GENERATOR=$PACKAGE_MANAGER
 
 make -j2 package
 
 if [ $PACKAGE_MANAGER = "deb" ]; then
-      echo $USERPASS | sudo -S dpkg -i libpmemobj++*.deb
+	sudo dpkg -i libpmemobj++*.deb
 elif [ $PACKAGE_MANAGER = "rpm" ]; then
-      echo $USERPASS | sudo -S rpm -i libpmemobj++*.rpm
+	sudo rpm -i libpmemobj++*.rpm
 fi
 
 #XXX: verify installed package - try to compile some program/example
