@@ -75,13 +75,19 @@ jobs:
 
        - name: Cache vcpkg packages
          uses: actions/cache@v1
-         id: cache-vcpkg
+         id: cache-vcpkg-packages
+         with:
+            path: C:/vcpkg/packages
+            key:  vcpkg-packages
+
+       - name: Cache vcpkg installed
+         uses: actions/cache@v1
+         id: cache-vcpkg-installed
          with:
             path: C:/vcpkg/installed
-            key:  vcpkg
+            key:  vcpkg-installed
 
        - name: Install PMDK
-         if: steps.cache-vcpkg.outputs.cache-hit != 'true'
          run: |
             vcpkg install pmdk:x64-windows
             vcpkg install sfml:x64-windows
