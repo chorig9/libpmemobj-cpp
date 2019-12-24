@@ -95,7 +95,7 @@ jobs:
          run: cmake . -Bbuild -G "${env:GENERATOR}" -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_INSTALL_PREFIX=c:/install/libpmemobj-cpp -DTESTS_USE_FORCED_PMEM=ON -DLIBPMEMOBJ_VERSION="${env:PMDK_VERSION}" -Ax64
 
        - name: Build
-         run: msbuild build/ALL_BUILD.vcxproj /property:Configuration=${{ matrix.CONFIG }} /verbosity:minimal
+         run: msbuild build/ALL_BUILD.vcxproj /property:Configuration=${{ matrix.CONFIG }} /verbosity:minimal /m
 
        - name: Tests
          run: |
