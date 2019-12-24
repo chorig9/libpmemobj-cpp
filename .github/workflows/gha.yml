@@ -97,3 +97,8 @@ jobs:
 
        - name: Build
          run: msbuild build/ALL_BUILD.vcxproj /property:Configuration=${{ matrix.CONFIG }} /verbosity:minimal
+
+       - name: Tests
+         run: |
+            cd build
+            ctest -C ${{ matrix.CONFIG }} --output-on-failure
