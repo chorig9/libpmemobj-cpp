@@ -33,6 +33,7 @@
 #ifndef LIBPMEMOBJ_CPP_UNITTEST_HPP
 #define LIBPMEMOBJ_CPP_UNITTEST_HPP
 
+
 #ifdef _WIN32
 /*
  * Enable workaround in libpmemobj.h for the issue with the offsetof() macro:
