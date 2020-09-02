@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['range_5fsnapshotting_5fiterator',['range_snapshotting_iterator',['../structpmem_1_1obj_1_1experimental_1_1range__snapshotting__iterator.html',1,'pmem::obj::experimental']]],
-  ['rebind',['rebind',['../structpmem_1_1obj_1_1standard__alloc__policy_1_1rebind.html',1,'pmem::obj::standard_alloc_policy&lt; T &gt;::rebind&lt; U &gt;'],['../structpmem_1_1obj_1_1object__traits_1_1rebind.html',1,'pmem::obj::object_traits&lt; T &gt;::rebind&lt; U &gt;'],['../structpmem_1_1obj_1_1allocator_1_1rebind.html',1,'pmem::obj::allocator&lt; T, Policy, Traits &gt;::rebind&lt; U &gt;'],['../structpmem_1_1obj_1_1object__traits_3_01void_01_4_1_1rebind.html',1,'pmem::obj::object_traits&lt; void &gt;::rebind&lt; U &gt;'],['../structpmem_1_1obj_1_1standard__alloc__policy_3_01void_01_4_1_1rebind.html',1,'pmem::obj::standard_alloc_policy&lt; void &gt;::rebind&lt; U &gt;']]]
+  ['manual',['manual',['../classpmem_1_1obj_1_1transaction_1_1manual.html',1,'pmem::obj::transaction']]],
+  ['manual_5ftx_5fabort',['manual_tx_abort',['../classpmem_1_1manual__tx__abort.html',1,'pmem']]],
+  ['mutex',['mutex',['../classpmem_1_1obj_1_1mutex.html',1,'pmem::obj']]],
+  ['mutex_5fvector',['mutex_vector',['../classpmem_1_1obj_1_1concurrent__hash__map_1_1mutex__vector.html',1,'pmem::obj::concurrent_hash_map']]]
 ];

@@ -1,9 +1,5 @@
 var searchData=
 [
-  ['timed_5fmutex',['timed_mutex',['../classpmem_1_1obj_1_1timed__mutex.html',1,'pmem::obj']]],
-  ['transaction',['transaction',['../classpmem_1_1obj_1_1transaction.html',1,'pmem::obj']]],
-  ['transaction_5falloc_5ferror',['transaction_alloc_error',['../classpmem_1_1transaction__alloc__error.html',1,'pmem']]],
-  ['transaction_5ferror',['transaction_error',['../classpmem_1_1transaction__error.html',1,'pmem']]],
-  ['transaction_5ffree_5ferror',['transaction_free_error',['../classpmem_1_1transaction__free__error.html',1,'pmem']]],
-  ['transaction_5fscope_5ferror',['transaction_scope_error',['../classpmem_1_1transaction__scope__error.html',1,'pmem']]]
+  ['object_5ftraits',['object_traits',['../classpmem_1_1obj_1_1object__traits.html',1,'pmem::obj']]],
+  ['object_5ftraits_3c_20void_20_3e',['object_traits&lt; void &gt;',['../classpmem_1_1obj_1_1object__traits_3_01void_01_4.html',1,'pmem::obj']]]
 ];
