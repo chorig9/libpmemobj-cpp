@@ -9,17 +9,20 @@
 #ifndef LIBPMEMOBJ_CPP_SELF_RELATIVE_PTR_HPP
 #define LIBPMEMOBJ_CPP_SELF_RELATIVE_PTR_HPP
 
-#include <libpmemobj++/detail/specialization.hpp>
-#include <libpmemobj++/experimental/self_relative_ptr_base.hpp>
-#include <libpmemobj++/persistent_ptr.hpp>
+#include "specialization.hpp"
+#include "self_relative_ptr_base.hpp"
 #include <type_traits>
 
 namespace pmem
 {
 namespace obj
 {
+
 namespace experimental
 {
+
+using self_relative_ptr_base =
+	pmem::detail::self_relative_ptr_base_impl<std::ptrdiff_t>;
 
 template <typename T>
 class self_relative_ptr;
@@ -136,27 +139,6 @@ public:
 	}
 
 	/**
-	 * Constructor from persistent_ptr<T>
-	 */
-	self_relative_ptr(persistent_ptr<T> ptr) noexcept
-	    : self_relative_ptr_base(self_offset(ptr.get()))
-	{
-	}
-
-	/**
-	 * PMEMoid constructor.
-	 *
-	 * Provided for easy interoperability between C++ and C API's.
-	 *
-	 * @param oid C-style persistent pointer
-	 */
-	self_relative_ptr(PMEMoid oid) noexcept
-	    : self_relative_ptr_base(self_offset(
-		      static_cast<element_type *>(pmemobj_direct(oid))))
-	{
-	}
-
-	/**
 	 * Copy constructor
 	 */
 	self_relative_ptr(const self_relative_ptr &ptr) noexcept
@@ -199,15 +181,6 @@ public:
 			self_relative_ptr_base::to_void_pointer());
 	}
 
-	/**
-	 * Conversion to persitent ptr
-	 */
-	persistent_ptr<T>
-	to_persistent_ptr() const
-	{
-		return persistent_ptr<T>{this->get()};
-	}
-
 	/*
 	 * Operators
 	 */
@@ -218,14 +191,6 @@ public:
 	explicit operator bool() const noexcept
 	{
 		return !is_null();
-	}
-
-	/**
-	 * Conversion operator to persistent_ptr
-	 */
-	operator persistent_ptr<T>() const
-	{
-		return to_persistent_ptr();
 	}
 
 	/**
@@ -309,7 +274,6 @@ public:
 	 */
 	self_relative_ptr &operator=(std::nullptr_t)
 	{
-		detail::conditional_add_to_tx(this);
 		this->offset = self_offset(nullptr);
 		return *this;
 	}
@@ -320,9 +284,7 @@ public:
 	inline self_relative_ptr<T> &
 	operator++()
 	{
-		detail::conditional_add_to_tx(this);
 		this->offset += static_cast<difference_type>(sizeof(T));
-
 		return *this;
 	}
 
@@ -344,9 +306,7 @@ public:
 	inline self_relative_ptr<T> &
 	operator--()
 	{
-		detail::conditional_add_to_tx(this);
 		this->offset -= static_cast<difference_type>(sizeof(T));
-
 		return *this;
 	}
 
@@ -358,7 +318,6 @@ public:
 	{
 		auto copy = *this;
 		--(*this);
-
 		return copy;
 	}
 
@@ -368,7 +327,6 @@ public:
 	inline self_relative_ptr<T> &
 	operator+=(std::ptrdiff_t s)
 	{
-		detail::conditional_add_to_tx(this);
 		this->offset += s * static_cast<difference_type>(sizeof(T));
 		return *this;
 	}
@@ -379,7 +337,6 @@ public:
 	inline self_relative_ptr<T> &
 	operator-=(std::ptrdiff_t s)
 	{
-		detail::conditional_add_to_tx(this);
 		this->offset -= s * static_cast<difference_type>(sizeof(T));
 		return *this;
 	}

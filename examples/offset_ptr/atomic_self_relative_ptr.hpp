@@ -4,10 +4,9 @@
 #ifndef LIBPMEMOBJ_CPP_ATOMIC_SELF_RELATIVE_PTR_HPP
 #define LIBPMEMOBJ_CPP_ATOMIC_SELF_RELATIVE_PTR_HPP
 
-#include <libpmemobj++/detail/common.hpp>
-#include <libpmemobj++/detail/self_relative_ptr_base_impl.hpp>
-#include <libpmemobj++/experimental/self_relative_ptr.hpp>
-#include <libpmemobj++/transaction.hpp>
+#include "self_relative_ptr_base_impl.hpp"
+#include "self_relative_ptr.hpp"
+
 
 #include <atomic>
 
@@ -48,7 +47,7 @@ public:
 	      std::memory_order order = std::memory_order_seq_cst) noexcept
 	{
 		auto offset = accessor::pointer_to_offset(ptr, desired.get());
-		LIBPMEMOBJ_CPP_ANNOTATE_HAPPENS_BEFORE(order, &ptr);
+		// LIBPMEMOBJ_CPP_ANNOTATE_HAPPENS_BEFORE(order, &ptr);
 		accessor::get_offset(ptr).store(offset, order);
 	}
 
@@ -56,7 +55,7 @@ public:
 	load(std::memory_order order = std::memory_order_seq_cst) const noexcept
 	{
 		auto offset = accessor::get_offset(ptr).load(order);
-		LIBPMEMOBJ_CPP_ANNOTATE_HAPPENS_AFTER(order, &ptr);
+		// LIBPMEMOBJ_CPP_ANNOTATE_HAPPENS_AFTER(order, &ptr);
 		auto pointer = accessor::offset_to_pointer<T>(offset, ptr);
 		return value_type{pointer};
 	}
@@ -109,12 +108,9 @@ public:
 		bool result = accessor::get_offset(ptr).compare_exchange_weak(
 			expected_offset, desired_offset, order);
 		if (!result) {
-			try {
-				expected = accessor::offset_to_pointer<T>(
-					expected_offset, ptr);
-			} catch (...) {
-				std::terminate();
-			}
+			expected = accessor::offset_to_pointer<T>(
+				expected_offset, ptr);
+
 		}
 		return result;
 	}
@@ -132,12 +128,8 @@ public:
 		bool result = accessor::get_offset(ptr).compare_exchange_strong(
 			expected_offset, desired_offset, success, failure);
 		if (!result) {
-			try {
-				expected = accessor::offset_to_pointer<T>(
-					expected_offset, ptr);
-			} catch (...) {
-				std::terminate();
-			}
+			expected = accessor::offset_to_pointer<T>(
+				expected_offset, ptr);
 		}
 		return result;
 	}
@@ -155,12 +147,8 @@ public:
 		bool result = accessor::get_offset(ptr).compare_exchange_strong(
 			expected_offset, desired_offset, order);
 		if (!result) {
-			try {
-				expected = accessor::offset_to_pointer<T>(
-					expected_offset, ptr);
-			} catch (...) {
-				std::terminate();
-			}
+			expected = accessor::offset_to_pointer<T>(
+				expected_offset, ptr);
 		}
 		return result;
 	}
@@ -211,13 +199,7 @@ public:
 	value_type
 	operator++() noexcept
 	{
-		try {
-			return this->fetch_add(1) + 1;
-		} catch (...) {
-			/* This should never happen during normal program
-			 * execution */
-			std::terminate();
-		}
+		return this->fetch_add(1) + 1;
 	}
 
 	value_type
@@ -229,13 +211,7 @@ public:
 	value_type
 	operator--() noexcept
 	{
-		try {
-			return this->fetch_sub(1) - 1;
-		} catch (...) {
-			/* This should never happen during normal program
-			 * execution */
-			std::terminate();
-		}
+		return this->fetch_sub(1) - 1;
 	}
 
 	value_type
@@ -247,25 +223,13 @@ public:
 	value_type
 	operator+=(difference_type diff) noexcept
 	{
-		try {
-			return this->fetch_add(diff) + diff;
-		} catch (...) {
-			/* This should never happen during normal program
-			 * execution */
-			std::terminate();
-		}
+		return this->fetch_add(diff) + diff;
 	}
 
 	value_type
 	operator-=(difference_type diff) noexcept
 	{
-		try {
-			return this->fetch_sub(diff) - diff;
-		} catch (...) {
-			/* This should never happen during normal program
-			 * execution */
-			std::terminate();
-		}
+		return this->fetch_sub(diff) - diff;
 	}
 
 private:
@@ -273,29 +237,5 @@ private:
 };
 
 } /* namespace std */
-
-namespace pmem
-{
-
-namespace detail
-{
-
-/**
- * can_do_snapshot atomic specialization for self_relative_ptr. Not thread safe.
- *
- * Use in a single threaded environment only.
- */
-template <typename T>
-struct can_do_snapshot<std::atomic<obj::experimental::self_relative_ptr<T>>> {
-	using snapshot_type = obj::experimental::self_relative_ptr<T>;
-	static constexpr bool value = sizeof(std::atomic<snapshot_type>) ==
-		sizeof(typename snapshot_type::offset_type);
-	static_assert(value,
-		      "std::atomic<self_relative_ptr> should be the same size");
-};
-
-} /* namespace detail */
-
-} /* namespace pmem */
 
 #endif
